@@ -1,0 +1,189 @@
+.emotion-form-container {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-section h3 {
+  color: #333;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 0.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+label {
+  font-weight: 600;
+  color: #555;
+}
+
+input, select, textarea {
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #1976d2;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.submit-button, .delete-form-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 140px;
+  text-align: center;
+}
+
+.submit-button {
+  background: #1976d2;
+  color: white;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: #1565c0;
+  transform: translateY(-1px);
+}
+
+.submit-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.delete-form-button {
+  background: #f44336;
+  color: white;
+}
+
+.delete-form-button:hover {
+  background: #d32f2f;
+  transform: translateY(-1px);
+}
+
+.emotions-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.emotion-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.emotion-card.editing {
+  border-color: #1976d2;
+  background: #e3f2fd;
+}
+
+.emotion-card.happy { border-color: #4caf50; background: #e8f5e8; }
+.emotion-card.neutral { border-color: #ff9800; background: #fff3e0; }
+.emotion-card.sad { border-color: #2196f3; background: #e3f2fd; }
+.emotion-card.angry { border-color: #f44336; background: #ffebee; }
+.emotion-card.anxious { border-color: #9c27b0; background: #f3e5f5; }
+
+.emotion-info {
+  flex: 1;
+}
+
+.emotion-date {
+  font-weight: 600;
+  color: #333;
+}
+
+.emotion-mood {
+  font-style: italic;
+  margin: 0.25rem 0;
+}
+
+.emotion-notes {
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.emotion-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-button, .delete-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+  min-width: 80px;
+}
+
+.edit-button {
+  background: #818589;
+  color: white;
+}
+
+.edit-button:hover {
+  background: #000;
+  transform: translateY(-1px);
+}
+
+.delete-button {
+  background: #818589;
+  color: white;
+}
+
+.delete-button:hover {
+  background: #000;
+  transform: translateY(-1px);
+}
+
+.no-emotions {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+  font-style: italic;
+}
+
+.loading {
+  text-align: center;
+  color: #666;
+  padding: 1rem;
+}

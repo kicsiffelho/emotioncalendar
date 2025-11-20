@@ -1,0 +1,135 @@
+.calendar {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.calendar-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.nav-button {
+  background: #1976d2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.nav-button:hover {
+  background: #1565c0;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.weekday {
+  text-align: center;
+  font-weight: 600;
+  color: #666;
+  padding: 0.5rem;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.day {
+  aspect-ratio: 1;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  background: white;
+}
+
+.day:hover {
+  border-color: #1976d2;
+  transform: translateY(-2px);
+}
+
+.day.other-month {
+  color: #ccc;
+  background: #f8f9fa;
+}
+
+.day.has-emotion {
+  border-width: 3px;
+}
+
+.emotion-happy {
+  border-color: #4caf50;
+  background: #e8f5e8;
+}
+
+.emotion-neutral {
+  border-color: #ff9800;
+  background: #fff3e0;
+}
+
+.emotion-sad {
+  border-color: #2196f3;
+  background: #e3f2fd;
+}
+
+.emotion-angry {
+  border-color: #f44336;
+  background: #ffebee;
+}
+
+.emotion-anxious {
+  border-color: #9c27b0;
+  background: #f3e5f5;
+}
+
+.day-number {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.emotion-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+
+.emotion-details {
+  position: fixed;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 1000;
+  min-width: 150px;
+  text-align: center;
+}
+
+.loading {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+}
