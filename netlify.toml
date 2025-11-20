@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "ng serve"
   publish = "dist/emotion-calendar"
 
 [[redirects]]
