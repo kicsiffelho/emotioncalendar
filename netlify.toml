@@ -1,6 +1,6 @@
 [build]
   command = "npm install && npx ng build"
-  publish = "dist/emotion-calendar"
+  publish = "dist/emotion-calendar/browser"
 
 [[redirects]]
   from = "/*"
