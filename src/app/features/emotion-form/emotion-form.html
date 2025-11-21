@@ -1,25 +1,16 @@
 <div class="emotion-form-container">
   <div class="form-section">
     <h3>{{ editingEmotion() ? 'Edit Emotion' : 'Add New Emotion' }}</h3>
-    
+
     <form (ngSubmit)="submit()" class="form-grid">
       <div class="form-group">
         <label for="date">Date</label>
-        <input 
-          type="date" 
-          id="date"
-          [(ngModel)]="newEmotion.date" 
-          name="date"
-          required>
+        <input type="date" id="date" [(ngModel)]="newEmotion.date" name="date" required />
       </div>
 
       <div class="form-group">
         <label for="mood">Mood</label>
-        <select 
-          id="mood"
-          [(ngModel)]="newEmotion.mood" 
-          name="mood"
-          required>
+        <select id="mood" [(ngModel)]="newEmotion.mood" name="mood" required>
           <option value="happy">😊 Happy</option>
           <option value="neutral">😐 Neutral</option>
           <option value="sad">😢 Sad</option>
@@ -28,28 +19,27 @@
         </select>
       </div>
 
-      <div class="form-group" style="grid-column: 1 / -1;">
+      <div class="form-group" style="grid-column: 1 / -1">
         <label for="notes">Notes (Optional)</label>
-        <textarea 
+        <textarea
           id="notes"
-          [(ngModel)]="newEmotion.notes" 
+          [(ngModel)]="newEmotion.notes"
           name="notes"
-          placeholder="How are you feeling?"></textarea>
+          placeholder="How are you feeling?"
+        ></textarea>
       </div>
 
       <div class="form-actions">
-        <button 
-          type="submit" 
-          class="submit-button"
-          [disabled]="saving()">
-          {{ saving() ? 'Saving...' : (editingEmotion() ? 'Update Emotion' : 'Add Emotion') }}
+        <button type="submit" class="submit-button" [disabled]="saving()">
+          {{ saving() ? 'Saving...' : editingEmotion() ? 'Update Emotion' : 'Add Emotion' }}
         </button>
-        
-        <button 
+
+        <button
           *ngIf="editingEmotion()"
-          type="button" 
+          type="button"
           class="delete-form-button"
-          (click)="deleteEmotion(editingEmotion()!.id)">
+          (click)="deleteEmotion(editingEmotion()!.id)"
+        >
           Delete Emotion
         </button>
       </div>
@@ -58,44 +48,75 @@
 
   <div class="form-section">
     <h3>Your Emotions</h3>
-    
+
+    <div class="search-filters">
+      <div class="search-group">
+        <label for="dateSearch">Search by Date:</label>
+        <input
+          type="date"
+          id="dateSearch"
+          appDateSearch
+          (dateSearch)="onDateSearch($event)"
+          placeholder="Filter by date"
+        />
+      </div>
+
+      <div class="search-group">
+        <label for="emotionSearch">Search by Mood:</label>
+        <select
+          id="emotionSearch"
+          appEmotionSearch
+          (emotionSearch)="onEmotionSearch($event)"
+        >
+          <option value="">All Moods</option>
+          <option value="happy">😊 Happy</option>
+          <option value="neutral">😐 Neutral</option>
+          <option value="sad">😢 Sad</option>
+          <option value="angry">😠 Angry</option>
+          <option value="anxious">😰 Anxious</option>
+        </select>
+      </div>
+
+      <button
+        *ngIf="hasActiveFilters()"
+        type="button"
+        class="clear-filters-button"
+        (click)="clearFilters()"
+      >
+        Clear Filters
+      </button>
+    </div>
+
     <div *ngIf="loading()" class="loading">Loading emotions...</div>
-    
-    <div *ngIf="!loading() && emotions().length === 0" class="no-emotions">
-      No emotions recorded yet. Add your first emotion above!
+
+    <div *ngIf="!loading() && filteredEmotions().length === 0" class="no-emotions">
+      <span *ngIf="hasActiveFilters()"> No emotions match your search criteria. </span>
+      <span *ngIf="!hasActiveFilters()">
+        No emotions recorded yet. Add your first emotion above!
+      </span>
     </div>
 
     <div class="emotions-list">
-      <div 
-        *ngFor="let emotion of emotions()" 
+      <div
+        *ngFor="let emotion of filteredEmotions()"
         class="emotion-card"
         [class]="'emotion-card ' + emotion.mood"
-        [class.editing]="editingEmotion()?.id === emotion.id">
-        
+        [class.editing]="editingEmotion()?.id === emotion.id"
+      >
         <div class="emotion-info">
           <div class="emotion-date">
-            {{ emotion.date | date:'MMM d, yyyy' }}
+            {{ emotion.date | date : 'MMM d, yyyy' }}
           </div>
           <div class="emotion-mood">
             {{ emotion.mood | titlecase }}
           </div>
-          <div *ngIf="emotion.notes" class="emotion-notes">
-            "{{ emotion.notes }}"
-          </div>
-          <small>Added: {{ emotion.createdAt | date:'short' }}</small>
+          <div *ngIf="emotion.notes" class="emotion-notes">"{{ emotion.notes }}"</div>
+          <small>Added: {{ emotion.createdAt | date : 'short' }}</small>
         </div>
 
         <div class="emotion-actions">
-          <button 
-            class="edit-button"
-            (click)="editEmotion(emotion)">
-            Edit
-          </button>
-          <button 
-            class="delete-button"
-            (click)="deleteEmotion(emotion.id)">
-            Delete
-          </button>
+          <button class="edit-button" (click)="editEmotion(emotion)">Edit</button>
+          <button class="delete-button" (click)="deleteEmotion(emotion.id)">Delete</button>
         </div>
       </div>
     </div>

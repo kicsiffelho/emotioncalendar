@@ -1,29 +1,34 @@
-import { Component, OnInit, OnDestroy, signal, input } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, input, computed } from '@angular/core'; // Added computed
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmotionsService } from '../../services/emotions';
 import { Emotion } from '../../models/emotion';
 import { Subscription } from 'rxjs';
+import { DateSearchDirective } from '../../shared/date-search';
+import { EmotionSearchDirective } from '../../shared/emotion-search';
 
 @Component({
   selector: 'app-emotion-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DateSearchDirective, EmotionSearchDirective],
   templateUrl: './emotion-form.html',
-  styleUrls: ['./emotion-form.css']
+  styleUrls: ['./emotion-form.css'],
 })
 export class EmotionFormComponent implements OnInit, OnDestroy {
   selectedDate = input<string>('');
-  
+
   emotions = signal<Emotion[]>([]);
   loading = signal<boolean>(false);
   saving = signal<boolean>(false);
   editingEmotion = signal<Emotion | null>(null);
-  
+
+  private dateFilter = signal<string>('');
+  private emotionFilter = signal<string>('');
+
   newEmotion = {
     date: this.getTodayDateString(),
     mood: 'neutral' as Emotion['mood'],
-    notes: ''
+    notes: '',
   };
 
   private sub?: Subscription;
@@ -33,7 +38,7 @@ export class EmotionFormComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     await this.loadEmotions();
     this.sub = this.emotionsService.changes$.subscribe(() => this.loadEmotions());
-    
+
     const initialDate = this.selectedDate();
     if (initialDate) {
       await this.setupFormForDate(initialDate);
@@ -42,6 +47,40 @@ export class EmotionFormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
+  }
+
+  filteredEmotions = computed(() => {
+    const emotions = this.emotions();
+    const dateFilter = this.dateFilter().toLowerCase();
+    const emotionFilter = this.emotionFilter().toLowerCase();
+
+    if (!dateFilter && !emotionFilter) {
+      return emotions;
+    }
+
+    return emotions.filter((emotion) => {
+      const matchesDate = !dateFilter || emotion.date.includes(dateFilter);
+      const matchesEmotion = !emotionFilter || emotion.mood.toLowerCase() === emotionFilter;
+
+      return matchesDate && matchesEmotion;
+    });
+  });
+
+  onDateSearch(date: string): void {
+    this.dateFilter.set(date);
+  }
+
+  onEmotionSearch(searchTerm: string): void {
+    this.emotionFilter.set(searchTerm);
+  }
+
+  hasActiveFilters(): boolean {
+    return !!this.dateFilter() || !!this.emotionFilter();
+  }
+
+  clearFilters(): void {
+    this.dateFilter.set('');
+    this.emotionFilter.set('');
   }
 
   private getTodayDateString(): string {
@@ -86,7 +125,7 @@ export class EmotionFormComponent implements OnInit, OnDestroy {
     this.newEmotion = {
       date: this.getTodayDateString(),
       mood: 'neutral',
-      notes: ''
+      notes: '',
     };
   }
 
@@ -101,15 +140,14 @@ export class EmotionFormComponent implements OnInit, OnDestroy {
         await this.emotionsService.update(this.editingEmotion()!.id, {
           date: this.newEmotion.date,
           mood: this.newEmotion.mood,
-          notes: this.newEmotion.notes
+          notes: this.newEmotion.notes,
         });
       } else {
         await this.emotionsService.add(this.newEmotion);
       }
-      
+
       this.resetForm();
       this.editingEmotion.set(null);
-      
     } catch (error) {
       console.error('Error saving emotion:', error);
     } finally {
